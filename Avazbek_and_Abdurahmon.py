@@ -1,13 +1,13 @@
 import os
-
+import mysql.connector
 
 class Users:
     def __init__(self):
-        self.name = None
-        self.surname = None
-        self.age = None
-        self.log = None
-        self.password = None
+        self.Name = None
+        self.Surname = None
+        self.Age = None
+        self.Log = None
+        self.Password = None
 
     def tizimga_kirish(self):
         self.cls()
@@ -51,10 +51,10 @@ class Users:
             age = input("Enter age: ").strip()
 
         self.cls()
-        logn = input("Enter login: ").strip().lower()
-        while not logn.isalnum():
+        login = input("Enter login: ").strip().lower()
+        while not login.isalnum():
             self.cls()
-            logn = input("Enter login: ").strip().lower()
+            login = input("Enter login: ").strip().lower()
 
         self.cls()
         password1 = input("Enter password: ").strip().lower()
@@ -62,8 +62,81 @@ class Users:
             self.cls()
             password1 = input("Enter password: ").strip().lower()
 
+        self.Name = name
+        self.Surname = surname
+        self.Age = int(age)
+        self.Log = login
+        self.Password = password1
+
+
+        mydb = self.database()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"insert into useres(name, surname, age, login, password)values('{self.Name}', '{self.Surname}', '{self.Age}', '{self.Log}', '{self.Password}')")
+        mydb.commit()
+
+    @staticmethod
+    def database():
+        my_db = mysql.connector.connect(
+            host="localhost",
+            user="Avazbek",
+            password="12345678",
+            database="login"
+        )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def log_in(self):
-        print("login")
+        pass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def change_log(self):
         print("changlog")
@@ -80,7 +153,29 @@ class Users:
 
     @staticmethod
     def str_empty(str_):
-        return bool(str_)
+        return not bool(str_)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     @staticmethod
     def dizayner():
