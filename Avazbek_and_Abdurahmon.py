@@ -1,5 +1,7 @@
 import os
 import getpass
+import time
+
 import mysql.connector
 
 class Users:
@@ -31,10 +33,9 @@ class Users:
         elif user_wants == elements[2]:
             self.change_log()
         elif user_wants == elements[3]:
-            self.log_out()
-        elif user_wants == elements[4]:
             self.del_accunt()
-
+        elif user_wants == elements[4]:
+            self.log_out()
     def register(self):
         self.cls()
         name = input("Ism: ").strip().lower()
@@ -88,59 +89,103 @@ class Users:
         mycursor.execute("select login,password from users")
         for i in mycursor:
             self.logins_and_pass.append(i)
-            for j in self.logins_and_pass:
-                self.loginlar.append(j[0])
-                self.parollar.append(j[1])
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        for j in self.logins_and_pass:
+            self.loginlar.append(j[0])
+            self.parollar.append(j[1])
 
     def log_in(self):
-        pass
+        self.cls()
+        login = input("Login: ").strip().lower()
+        while not login.isalnum() or login not in self.loginlar:
+            self.cls()
+            print("Xato kiritdingiz qayta kiriting!")
+            login = input("Login: ").strip().lower()
 
+        mydb = self.database()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"select password from users where login='{login}'")
+        dbpas = None
+        for i in mycursor:
+            dbpas = i[0]
+        self.cls()
+        password = getpass.getpass("Parol: secret")
+        while password != dbpas:
+            self.cls()
+            print(f"Xato kiritdingiz qayta kiriting!")
+            password = getpass.getpass("Parol: secret")
+        self.cls()
+        print("Tizimga hush kelibsiz!")
     def change_log(self):
-        print("changlog")
+        self.cls()
+        login = input("Login: ").strip().lower()
+        while not login.isalnum() or login not in self.loginlar:
+            self.cls()
+            print("Xato kiritdingiz qayta kiriting!")
+            login = input("Login: ").strip().lower()
+
+        mydb = self.database()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"select password from users where login='{login}'")
+        dbpas = None
+        for i in mycursor:
+            dbpas = i[0]
+        self.cls()
+        password = getpass.getpass("Parol: secret")
+        while password != dbpas:
+            self.cls()
+            print(f"Xato kiritdingiz qayta kiriting!")
+            password = getpass.getpass("Parol: secret")
+        self.cls()
+
+        new_log = input("Yangi login: ")
+        while not new_log.isalnum() or new_log in self.loginlar:
+            self.cls()
+            print("Bunday login mavjud qayta kiriting!")
+            new_log = input("Yangi login: ")
+        self.cls()
+        new_pass = input("Yangi password: ")
+        while self.str_empty(new_pass):
+            self.cls()
+            print("Xato kiritdingiz qayta urinib ko'ring!")
+            new_pass = input("Yangi password: ")
+        self.cls()
+        my_db = self.database()
+        mycurs = my_db.cursor()
+        mycurs.execute(f"update users set login='{new_log}',password='{new_pass}' where login='{login}'")
+        my_db.commit()
+        print("Login muvofiqiyatli yangilarndi!")
 
     def log_out(self):
         print("Siz tizimdan chiqib kettingiz!")
-        exit()
+        time.sleep(.2)
 
     def del_accunt(self):
-        pass
+        self.cls()
+        login = input("Login: ").strip().lower()
+        while not login.isalnum() or login not in self.loginlar:
+            self.cls()
+            print("Xato kiritdingiz qayta kiriting!")
+            login = input("Login: ").strip().lower()
 
+        mydb = self.database()
+        mycursor = mydb.cursor()
+        mycursor.execute(f"select password from users where login='{login}'")
+        dbpas = None
+        for i in mycursor:
+            dbpas = i[0]
+        self.cls()
+        password = getpass.getpass("Parol: secret")
+        while password != dbpas:
+            self.cls()
+            print(f"Xato kiritdingiz qayta kiriting!")
+            password = getpass.getpass("Parol: secret")
+        self.cls()
+        input("Enter")
+        my_db = self.database()
+        mycurs = my_db.cursor()
+        mycurs.execute(f"delete from users where login='{login}'")
+        my_db.commit()
+        print("Login o'chdi karochche")
     @staticmethod
     def cls():
         os.system("clear")
@@ -160,18 +205,18 @@ class Users:
     @staticmethod
     def dizayner():
         print("""
-  <<<<<<<<<<<< Tizimga_kirish>>>>>>>>>>>> 
-
-            Register           [1]
-        -------------------------------
-            Login              [2]
-        -------------------------------  
-            Change login       [3]
-        -------------------------------
-            Log out            [4]
-        -------------------------------
-            Delete account     [5]
-
+              ---Najot Ta'lim---                    
+            ----------------------
+             Register         [1]  
+            ----------------------
+             Login            [2]  
+            ----------------------
+             Change Login     [3]  
+            ----------------------
+             Delete login     [4]
+            ----------------------
+             Log out          [5]  
+            ----------------------
         """)
 
 
