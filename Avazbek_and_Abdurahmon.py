@@ -1,4 +1,5 @@
 import os
+import getpass
 import mysql.connector
 
 class Users:
@@ -8,6 +9,10 @@ class Users:
         self.Age = None
         self.Log = None
         self.Password = None
+        self.parollar = []
+        self.loginlar = []
+        self.logins_and_pass = []
+        self.logins_and_passes()
 
     def tizimga_kirish(self):
         self.cls()
@@ -32,51 +37,94 @@ class Users:
 
     def register(self):
         self.cls()
-        name = input("Enter name: ").strip().lower()
+        name = input("Ism: ").strip().lower()
         while not name.isalpha() or len(name) < 3:
             self.cls()
-            print(f"To'g'ri kiriting...")
-            name = input("Enter name: ").strip().lower()
+            print("To'g'riligiga ishoch hosil qiling...")
+            name = input("Ism: ").strip().lower()
 
         self.cls()
-        surname = input("Enter surname: ")
+        surname = input("Familya: ")
         while not surname.isalpha() or len(surname) < 3:
             self.cls()
-            surname = input("Enter surname: ")
+            surname = input("Familya: ")
 
         self.cls()
-        age = input("Enter age: ").strip()
+        age = input("Yosh: ").strip()
         while not age.isnumeric():
             self.cls()
-            age = input("Enter age: ").strip()
+            age = input("Yosh: ").strip()
 
         self.cls()
-        login = input("Enter login: ").strip().lower()
-        while not login.isalnum():
+        login = input("Login: ").strip().lower()
+        while not login.isalnum() or login in self.loginlar:
             self.cls()
-            login = input("Enter login: ").strip().lower()
+            print("Xato qayta kiriting!")
+            login = input("Login: ").strip().lower()
 
         self.cls()
-        password1 = input("Enter password: ").strip().lower()
-        password2 = input("Configure password: ").strip().lower()
-        while self.str_empty(password1) or password2 != password1:
+        password1 = getpass.getpass("Parol: secret").strip().lower()
+        password2 = getpass.getpass("Parol: secret").strip().lower()
+        while self.str_empty(password1) or password2 != password1 or password1 in self.parollar:
             self.cls()
-            password1 = input("Enter password: ").strip().lower()
-            password2 = input("Configure password: ").strip().lower()
-
+            password1 = getpass.getpass("Parol: secret").strip().lower()
+            password2 = getpass.getpass("Parol: secret").strip().lower()
         self.cls()
-        print("\t---Tizimga hush kelibsiz---")
         self.Name = name
         self.Surname = surname
         self.Age = age
         self.Log = login
         self.Password = password1
-
-
+        exit()
         my_db = self.database()
         mycursor = my_db.cursor()
         mycursor.execute(f"insert into users(name, surname, age, login, password)values('{self.Name}','{self.Surname}','{self.Age}','{self.Log}','{self.Password}')")
         my_db.commit()
+        print("\t--Tizimga hush kelibsiz--")
+
+    def logins_and_passes(self):
+        my_db = self.database()
+        mycursor = my_db.cursor()
+        mycursor.execute("select login,password from users")
+        for i in mycursor:
+            self.logins_and_pass.append(i)
+            for j in self.logins_and_pass:
+                self.loginlar.append(j[0])
+                self.parollar.append(j[1])
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -87,10 +135,11 @@ class Users:
         print("changlog")
 
     def log_out(self):
-        print("logout")
+        print("Siz tizimdan chiqib kettingiz!")
+        exit()
 
     def del_accunt(self):
-        print("del")
+        pass
 
     @staticmethod
     def cls():
@@ -126,6 +175,7 @@ class Users:
         """)
 
 
+
 user = Users()
 user.tizimga_kirish()
 
@@ -146,21 +196,20 @@ user.tizimga_kirish()
 
 
 
+# while login in self.logins:
+#     print("Bunday login mavjud qayta kiriting!")
+#     self.cls()
+#     login = input("Enter login: ").strip().lower()
+#     while not login.isalnum():
+#         self.cls()
+#         login = input("Enter login: ").strip().lower()
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# while password1 in self.passwords:
+#     print("Bunday parol mavjud qayta kiriting!")
+#     self.cls()
+#     password1 = input("Enter password: ").strip().lower()
+#     password2 = input("Configure password: ").strip().lower()
+#     while self.str_empty(password1) or password2 != password1:
+#         self.cls()
+#         password1 = input("Enter password: ").strip().lower()
+#         password2 = input("Configure password: ").strip().lower()
