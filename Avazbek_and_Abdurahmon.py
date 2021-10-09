@@ -58,85 +58,30 @@ class Users:
 
         self.cls()
         password1 = input("Enter password: ").strip().lower()
-        while self.str_empty(password1):
+        password2 = input("Configure password: ").strip().lower()
+        while self.str_empty(password1) or password2 != password1:
             self.cls()
             password1 = input("Enter password: ").strip().lower()
+            password2 = input("Configure password: ").strip().lower()
 
+        self.cls()
+        print("\t---Tizimga hush kelibsiz---")
         self.Name = name
         self.Surname = surname
-        self.Age = int(age)
+        self.Age = age
         self.Log = login
         self.Password = password1
 
 
-        mydb = self.database()
-        mycursor = mydb.cursor()
-        mycursor.execute(f"insert into useres(name, surname, age, login, password)values('{self.Name}', '{self.Surname}', '{self.Age}', '{self.Log}', '{self.Password}')")
-        mydb.commit()
-
-    @staticmethod
-    def database():
-        my_db = mysql.connector.connect(
-            host="localhost",
-            user="Avazbek",
-            password="12345678",
-            database="login"
-        )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        my_db = self.database()
+        mycursor = my_db.cursor()
+        mycursor.execute(f"insert into users(name, surname, age, login, password)values('{self.Name}','{self.Surname}','{self.Age}','{self.Log}','{self.Password}')")
+        my_db.commit()
 
 
 
     def log_in(self):
         pass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def change_log(self):
         print("changlog")
@@ -155,28 +100,14 @@ class Users:
     def str_empty(str_):
         return not bool(str_)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @staticmethod
+    def database():
+        return mysql.connector.connect(
+            host="localhost",
+            user="Avazbek",
+            password="12345678",
+            database="login"
+        )
     @staticmethod
     def dizayner():
         print("""
